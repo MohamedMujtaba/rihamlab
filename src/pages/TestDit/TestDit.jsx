@@ -7,7 +7,7 @@ const TestDit = () => {
   const { id } = useParams();
   const history = useHistory();
   const [name, setName] = useState("");
-  const [normal, setNormal] = useState("");
+  const [normal, setNormal] = useState({});
   const [price, setPrice] = useState("");
   const [comments, setComments] = useState("");
   const [loading, setLoading] = useState(true);
@@ -65,13 +65,25 @@ const TestDit = () => {
               />
             </div>
             <div className="input-area">
-              <label htmlFor="normal">Normal</label>
+              <label htmlFor="normal">Male Normal</label>
               <input
+                value={normal.male}
                 required
-                value={normal}
-                onChange={(e) => setNormal(e.target.value)}
                 type="text"
                 name="normal"
+                onChange={(e) => setNormal({ ...normal, male: e.target.value })}
+              />
+            </div>
+            <div className="input-area">
+              <label htmlFor="normal">Female Normal</label>
+              <input
+                value={normal.female}
+                required
+                type="text"
+                name="normal"
+                onChange={(e) =>
+                  setNormal({ ...normal, female: e.target.value })
+                }
               />
             </div>
             <div className="input-area">

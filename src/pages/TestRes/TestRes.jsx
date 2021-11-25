@@ -103,7 +103,11 @@ const TestRes = () => {
                       <p style={{ textAlign: "start", width: "50%" }}>
                         {test.testName}
                       </p>
-                      <p>{test.normal}</p>
+                      <p>
+                        {user.gender === "Male"
+                          ? test.normal.male
+                          : test.normal.female}
+                      </p>
                       <p>{test.result}</p>
                     </TableRow>
                     <Block>
@@ -116,7 +120,7 @@ const TestRes = () => {
           </Table>
           <Footer>
             <p style={{ fontSize: "14px" }}>
-              <p>لسنا الوحيدون لكننا الافضل</p>
+              <p>دقة التشخيص ... سرعةالأداء</p>
               <p>0901459802 - 0901459802</p>
             </p>
             <p style={{ fontSize: "14px" }}>

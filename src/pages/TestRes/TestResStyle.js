@@ -1,6 +1,6 @@
 import styled from "styled-components";
 export const Top = styled.div`
-  height: 100px;
+  height: 150px;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -55,7 +55,7 @@ export const TableRow = styled.div`
 `;
 export const Block = styled.div`
   break-inside: avoid-page;
-   break-before: avoid-page;
+  break-before: avoid-page;
   break-after: avoid-page; 
   width: 100%;
 `

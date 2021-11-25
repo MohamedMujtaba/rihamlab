@@ -156,7 +156,7 @@ const Userdit = () => {
                     onChange={(e) => setGender(e.target.value)}
                   >
                     <option value="male">Male</option>
-                    <option value="female">female</option>
+                    <option value="female">Female</option>
                   </select>
                 </div>
                 <div className="input-area">
