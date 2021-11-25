@@ -27,8 +27,28 @@ const Tests = () => {
         "https://reham-api-v1.herokuapp.com/api/v1/tests"
       );
       const data = await res.json();
-      setTests(data);
-      setTheData(data.reverse());
+      setTests(
+        data.sort(function (a, b) {
+          if (a.firstname < b.firstname) {
+            return -1;
+          }
+          if (a.firstname > b.firstname) {
+            return 1;
+          }
+          return 0;
+        })
+      );
+      setTheData(
+        data.sort(function (a, b) {
+          if (a.firstname < b.firstname) {
+            return -1;
+          }
+          if (a.firstname > b.firstname) {
+            return 1;
+          }
+          return 0;
+        })
+      );
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -58,9 +78,19 @@ const Tests = () => {
             </div>
           </div>
           <div className="tests-lest">
-            {tests.map((test) => {
-              return <Test key={test._id} test={test} />;
-            })}
+            {tests
+              .sort(function (a, b) {
+                if (a.firstname < b.firstname) {
+                  return -1;
+                }
+                if (a.firstname > b.firstname) {
+                  return 1;
+                }
+                return 0;
+              })
+              .map((test) => {
+                return <Test key={test._id} test={test} />;
+              })}
           </div>
         </div>
       )}

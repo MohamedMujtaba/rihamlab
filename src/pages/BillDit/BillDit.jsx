@@ -4,9 +4,10 @@ import { FcSurvey } from "react-icons/fc";
 import { useParams } from "react-router";
 import FloatButton from "../../components/FloatButton/FloatButton";
 import { addComma } from "../../utils/addComma";
-import { Dit, Top } from "../TestRes/TestResStyle";
+import { Dit, Footer, Top } from "../TestRes/TestResStyle";
 import { BillList, InsCont, Item, Main } from "./BillDitStyle";
 import Loading from "../../components/Loading/Loading";
+import logo from "../../img/logo.png";
 
 const BillDit = () => {
   const { id } = useParams();
@@ -47,18 +48,20 @@ const BillDit = () => {
           />
           <Top>
             <div>
-              <h4> معمل رهام الطبي</h4>
-              <h4> عطبره شارع الدكاتره</h4>
+              <h2> معمل الرهام الطبي الحديث</h2>
+              <h4> خلف مجمع طارق الطبي وجوار</h4>
+              <h4> مركز الصدى للسمع </h4>
               <h4> 0912345678</h4>
             </div>
-            <div>
-              <h1
+            <div style={{ height: "100%" }}>
+              <img
                 style={{
-                  marginRight: "2rem",
+                  width: "100%",
+                  height: "100%",
                 }}
-              >
-                Logo
-              </h1>
+                src={logo}
+                alt="logo"
+              />
             </div>
           </Top>
           <Dit>
@@ -110,6 +113,20 @@ const BillDit = () => {
               icon={<FcSurvey />}
             />
           )}
+          <Footer>
+            <p style={{ fontSize: "14px" }}>
+              <p>لسنا الوحيدون لكننا الافضل</p>
+              <p>0901459802 - 0901459802</p>
+            </p>
+            <p style={{ fontSize: "14px" }}>
+              <p>المكان خلف مجمع طارق الطبي </p>
+              <p>وجوار مركز الصدى للسمع</p>
+            </p>
+            <p style={{ fontSize: "14px" }}>
+              <p>معمل الرهام الطبي الحديث </p>
+              <p>نتمنى لكم دوام الصحه والعافه </p>
+            </p>
+          </Footer>
         </Main>
       )}
     </>
