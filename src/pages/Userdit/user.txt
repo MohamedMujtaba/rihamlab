@@ -1,0 +1,293 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import "./Userdit.css";
+import { FcDataBackup, FcPrevious } from "react-icons/fc";
+import { FaRegUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { MdOutlineAdd } from "react-icons/md";
+import axios from "axios";
+const Left = styled.div`
+  width: 40%;
+  height: 100%;
+  padding: 1rem;
+`;
+const Right = styled.div`
+  width: 60%;
+  height: 100%;
+  display: flex;
+`;
+const User = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* text-align: start; */
+  justify-content: center;
+  min-height: 400px;
+  max-width: 100%;
+  /* background-color: red; */
+  padding: 2rem;
+  gap: 10px;
+`;
+const List = styled.div`
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 50%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+  /* min-height: 80vh; */
+  div{
+    display: flex;
+    width: 100%;
+    max-height: 80%;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 10px;
+    overflow-y: auto;
+  }
+`;
+const ListItem = styled(Link)`
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 5px;
+  color: rgb(30, 30, 30);
+  text-decoration: none;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
+  p:nth-child(2){
+    background-color: greenyellow;
+    min-width: 20px;
+    padding: 3px 10px;
+    border-radius: 15px;
+    text-align: center;
+  }
+`;
+const Userdit = () => {
+  const { id } = useParams();
+  const [user, setUser] = useState({});
+  const [userBills, setUserBills] = useState([]);
+  const [userResults, setUserResults] = useState([]);
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [number, setNumber] = useState("");
+  const [age, setAge] = useState(20);
+  const [gender, setGender] = useState("Male");
+  const [edite, setEdite] = useState(false);
+  const getUser = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/users/${id}`);
+      const data = await res.json();
+      setUser(data);
+      setName(data.name);
+      setAddress(data.address);
+      setNumber(data.phone);
+      setAge(data.age);
+      setGender(data.gender);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getUserBills = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/bills/userbills/${id}`);
+      const data = await res.json();
+      setUserBills(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getUserResults = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/results/userres/${id}`);
+      const data = await res.json();
+      setUserResults(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const updateUser = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:8000/api/v1/users/${user._id}`, {
+        name,
+        address,
+        phone: number,
+        age,
+        gender,
+      });
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getUser();
+    getUserBills();
+    getUserResults();
+  }, []);
+  return (
+    <div className="userdit">
+      <Left>
+        <Link to={`/newbill/${user._id}`} className="add" style={{
+          position: 'fixed',
+          height: '60px',
+          width: '60px',
+          borderRadius: '50%',
+          bottom: '5%',
+          right: '5%',
+          fontSize: '24px',
+        }}>
+          <MdOutlineAdd />
+        </Link>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: 'center'
+          }}
+        >
+          <button className="btn-info" onClick={() => setEdite(!edite)}>
+            {edite ? <FcPrevious /> : <FcDataBackup />}
+          </button>
+          <h4> Patient Details</h4>
+
+        </div>
+        {edite ? (
+          <div className="edite-user">
+            <form>
+              <div className="input-area">
+                <label htmlFor="name">Patient Name</label>
+                <input required
+                  value={name}
+                  type="text"
+                  name="name"
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="input-area">
+                <label htmlFor="address">Patient Address</label>
+                <input 
+                required
+                  value={address}
+                  type="text"
+                  name="address"
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+              <div className="input-area">
+                <label htmlFor="number">Patient Phone Number</label>
+                <input required
+                  value={number}
+                  type="number"
+                  name="number"
+                  onChange={(e) => setNumber(e.target.value)}
+                />
+              </div>
+              <div className="input-area">
+                <label htmlFor="age">Patient Age</label>
+                <input required
+                  value={age}
+                  type="number"
+                  name="age"
+                  onChange={(e) => setAge(e.target.value)}
+                />
+              </div>
+              <div className="input-area">
+                <label htmlFor="gender">Patient Gander</label>
+                <select
+                  value={gender}
+                  name="gender"
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <option value="male">Male</option>
+                  <option value="female">female</option>
+                </select>
+              </div>
+              <div className="input-area">
+                <button onClick={updateUser} className="btn" type="submit">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <User>
+            <div
+              style={{
+                fontSize: "40px",
+                fontWeight: "100",
+                background: "#f4f4f4",
+                borderRadius: "50%",
+                height: " 70px",
+                width: "70px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FaRegUser />
+            </div>
+            <h3>{user.name}</h3>
+            <h3>{user.address} </h3>
+            <h3>{user.age}</h3>
+            <h3>{user.gender}</h3>
+          </User>
+        )}
+      </Left>
+      <Right>
+        <List>
+          <h3>Resuls</h3>
+          <div>
+            {
+              userResults.map((bill) => {
+                return (
+                  <Bill bill={bill} />
+                );
+              })
+            }
+          </div>
+        </List>
+        <List>
+          <h3>bills</h3>
+          <div>
+            {
+              userBills.map((bill) => {
+                return (
+                  <Bill bill={bill} />
+                );
+              })
+            }
+          </div>
+        </List>
+      </Right>
+    </div>
+  );
+};
+
+const Bill = ({ bill }) => {
+  return (
+    <ListItem to={`/newres/${bill._id}`} >
+      <p>{bill.createdAt.split('T')[0]}</p>
+      <p>{bill.total || 'Done'}</p>
+    </ListItem>
+  );
+};
+
+export default Userdit;

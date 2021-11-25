@@ -1,0 +1,17 @@
+.new-result {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.result {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.line1{}
+.line2{}
+.result-input{}
+.comment-input{}

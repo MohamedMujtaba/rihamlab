@@ -1,0 +1,43 @@
+.new-user {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.input-area label {
+  font-size: 16px;
+  color: #c4c4c4;
+}
+.input-area input {
+  width: 350px;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  border: solid 1px#9e9a9a;
+  outline: none;
+  font-size: 20px;
+}
+.input-area select {
+  width: 350px;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  border: solid 1px#9e9a9a;
+  outline: none;
+  font-size: 20px;
+}
+.btn {
+  border: none;
+  border-radius: 5px;
+  padding: 1rem 1rem;
+  margin: 1rem 0;
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
