@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { AiOutlinePrinter } from "react-icons/ai";
+import { FcSurvey } from "react-icons/fc";
 import { useParams } from "react-router";
 import FloatButton from "../../components/FloatButton/FloatButton";
 import { addComma } from "../../utils/addComma";
@@ -106,6 +107,7 @@ const BillDit = () => {
               to={`/newres/${bill._id}`}
               left={"10%"}
               content={"Make Result"}
+              icon={<FcSurvey />}
             />
           )}
         </Main>
