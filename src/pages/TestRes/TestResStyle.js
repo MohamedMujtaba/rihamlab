@@ -50,7 +50,7 @@ export const TableRow = styled.div`
   p {
     width: 30%;
     text-align: center;
-    font-size: 15px;
+    font-size: 16px;
   }
 `;
 export const Block = styled.div`
