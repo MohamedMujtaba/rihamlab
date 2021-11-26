@@ -29,10 +29,10 @@ const Tests = () => {
       const data = await res.json();
       setTests(
         data.sort(function (a, b) {
-          if (a.firstname < b.firstname) {
+          if (a.testName < b.testName) {
             return -1;
           }
-          if (a.firstname > b.firstname) {
+          if (a.testName > b.testName) {
             return 1;
           }
           return 0;
@@ -40,10 +40,10 @@ const Tests = () => {
       );
       setTheData(
         data.sort(function (a, b) {
-          if (a.firstname < b.firstname) {
+          if (a.testName < b.testName) {
             return -1;
           }
-          if (a.firstname > b.firstname) {
+          if (a.testName > b.testName) {
             return 1;
           }
           return 0;
@@ -78,19 +78,9 @@ const Tests = () => {
             </div>
           </div>
           <div className="tests-lest">
-            {tests
-              .sort(function (a, b) {
-                if (a.firstname < b.firstname) {
-                  return -1;
-                }
-                if (a.firstname > b.firstname) {
-                  return 1;
-                }
-                return 0;
-              })
-              .map((test) => {
-                return <Test key={test._id} test={test} />;
-              })}
+            {tests.map((test) => {
+              return <Test key={test._id} test={test} />;
+            })}
           </div>
         </div>
       )}
