@@ -66,9 +66,10 @@ const NewResult = () => {
               }}
             >
               {tests.map((test) => {
-                return <Line test={test} />;
+                return <Line test={test} user={user} />;
               })}
               <FloatButton
+                content={"Done"}
                 icon={<FcCheckmark />}
                 type={"submit"}
                 att={"button"}
@@ -81,7 +82,7 @@ const NewResult = () => {
   );
 };
 
-const Line = ({ test }) => {
+const Line = ({ test, user }) => {
   const [res, setRes] = useState("");
   const [com, setCom] = useState("");
   useEffect(() => {
@@ -96,7 +97,7 @@ const Line = ({ test }) => {
     <>
       <TableRow>
         <p style={{ textAlign: "start", width: "50%" }}>{test.testName}</p>
-        <p>{test.normal}</p>
+        <p>{user.gender === "Male" ? test.normal.male : test.normal.female}</p>
         <p>
           {" "}
           <input

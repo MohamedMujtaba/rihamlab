@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 import "./NewTest.css";
+import TextEditor from "../../components/TextEditor/TextEditor";
 const NewTest = () => {
   const [testName, setTestName] = useState("");
   const [normal, setNormal] = useState({});

@@ -63,6 +63,7 @@
   padding: 5px;
   text-decoration: none;
   color: black;
+  text-transform: capitalize;
 }
 
 .test h4 {

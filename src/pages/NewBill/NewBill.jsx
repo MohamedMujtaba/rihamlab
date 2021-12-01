@@ -40,8 +40,28 @@ const NewBill = () => {
         "https://reham-api-v1.herokuapp.com/api/v1/tests"
       );
       const data = await res.json();
-      setTests(data);
-      setTheData(data);
+      setTests(
+        data.sort(function (a, b) {
+          if (a.testName < b.testName) {
+            return -1;
+          }
+          if (a.testName > b.testName) {
+            return 1;
+          }
+          return 0;
+        })
+      );
+      setTheData(
+        data.sort(function (a, b) {
+          if (a.testName < b.testName) {
+            return -1;
+          }
+          if (a.testName > b.testName) {
+            return 1;
+          }
+          return 0;
+        })
+      );
       setLoading(false);
     } catch (err) {
       console.log(err);

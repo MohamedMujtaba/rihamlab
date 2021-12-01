@@ -8,7 +8,7 @@ const MainP = styled.p`
   min-height: 1rem;
   padding: 0 1rem;
   /* padding: 3rem; */
-  /* font-size: 15px; */
+  font-size: 13px;
   break-inside: avoid-page;
   display: flex;
   justify-content: space-between;

@@ -4,7 +4,7 @@ export const Top = styled.div`
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  font-family: 'Kufam';
+  font-family: 'Kufam' !important;
   /* position: fixed;
   top:0;
   left: 0; */

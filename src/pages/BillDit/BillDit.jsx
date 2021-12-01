@@ -4,10 +4,11 @@ import { FcSurvey } from "react-icons/fc";
 import { useParams } from "react-router";
 import FloatButton from "../../components/FloatButton/FloatButton";
 import { addComma } from "../../utils/addComma";
-import { Dit, Footer, Top } from "../TestRes/TestResStyle";
-import { BillList, InsCont, Item, Main } from "./BillDitStyle";
+import { Block, Dit, Footer } from "../TestRes/TestResStyle";
+import { BillList, InsCont, Item, Main, QR, Top } from "./BillDitStyle";
 import Loading from "../../components/Loading/Loading";
 import logo from "../../img/logo.png";
+import QRCode from "qrcode.react";
 
 const BillDit = () => {
   const { id } = useParams();
@@ -56,15 +57,15 @@ const BillDit = () => {
             <div style={{ height: "100%" }}>
               <img
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "128px",
+                  height: "90px",
                 }}
                 src={logo}
                 alt="logo"
               />
             </div>
           </Top>
-          <Dit>
+          <Dit style={{ height: "65px" }}>
             <p>{user.name}</p>
             <p>0{user.phone}</p>
           </Dit>
@@ -73,6 +74,7 @@ const BillDit = () => {
               <p>Test Name</p>
               <p style={{ width: "8%", textAlign: "right" }}>Price</p>
             </Item>
+
             {tests.map((i) => {
               return (
                 <Item>
@@ -83,6 +85,7 @@ const BillDit = () => {
                 </Item>
               );
             })}
+
             <Item>
               <p style={{ fontWeight: "bolder" }}>Total</p>
               <p
@@ -127,6 +130,14 @@ const BillDit = () => {
               <p>نتمنى لكم دوام الصحة والعافية </p>
             </p>
           </Footer>
+          <QR>
+            <QRCode
+              size={100}
+              value={`${bill.total} ,${user.name} ,${
+                bill.createdAt.split("T")[0]
+              }`}
+            />
+          </QR>
         </Main>
       )}
     </>
