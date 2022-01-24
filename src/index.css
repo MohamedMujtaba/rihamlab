@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Vibes&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Kufam:wght@400;600&family=Vibes&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Kufam:wght@400;600&family=Poppins:ital,wght@0,300;0,400;1,200&display=swap");
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -8,9 +7,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Poppins", sans-serif;
-  /* font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace; */
 }
 
 * {
@@ -44,10 +40,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-textarea {
-  font-family: monospace;
-  font-size: 16px;
-}
+
 /* width */
 ::-webkit-scrollbar {
   /* display: none; */

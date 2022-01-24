@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 import "./NewTest.css";
-import TextEditor from "../../components/TextEditor/TextEditor";
 const NewTest = () => {
   const [testName, setTestName] = useState("");
-  const [normal, setNormal] = useState({});
+  const [normal, setNormal] = useState("");
   const [price, setPrice] = useState("");
   const [comments, setComments] = useState("");
   const history = useHistory();
@@ -16,60 +15,32 @@ const NewTest = () => {
         testName,
         normal,
         price,
-        comments,
+        comments
       });
-      history.push("/tests");
+      history.push('/tests');
     } catch (err) {
       console.log(err);
     }
   };
-  console.log(normal);
   return (
     <div className="new-test">
       <h1>Add New Test</h1>
       <form onSubmit={handleSubmit}>
         <div className="input-area">
           <label htmlFor="name">Test Name</label>
-          <input
-            required
-            type="text"
-            name="name"
-            onChange={(e) => setTestName(e.target.value)}
-          />
+          <input required type="text" name="name" onChange={(e) => setTestName(e.target.value)} />
         </div>
         <div className="input-area">
-          <label htmlFor="normal">Male Normal</label>
-          <input
-            required
-            type="text"
-            name="normal"
-            onChange={(e) => setNormal({ ...normal, male: e.target.value })}
-          />
-        </div>
-        <div className="input-area">
-          <label htmlFor="normal">Female Normal</label>
-          <input
-            required
-            type="text"
-            name="normal"
-            onChange={(e) => setNormal({ ...normal, female: e.target.value })}
-          />
+          <label htmlFor="normal">Normal</label>
+          <input required type="text" name="normal" onChange={(e) => setNormal(e.target.value)} />
         </div>
         <div className="input-area">
           <label htmlFor="price">Price</label>
-          <input
-            required
-            type="number"
-            name="price"
-            onChange={(e) => setPrice(e.target.value)}
-          />
+          <input required type="number" name="price" onChange={(e) => setPrice(e.target.value)} />
         </div>
         <div className="input-area">
           <label htmlFor="Comments">Comments</label>
-          <textarea
-            name="Comments"
-            onChange={(e) => setComments(e.target.value)}
-          />
+          <textarea name="Comments" onChange={(e) => setComments(e.target.value)} />
         </div>
         <div className="input-area">
           <button className="btn" type="submit">
