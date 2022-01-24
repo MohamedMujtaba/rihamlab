@@ -1,3 +1,18 @@
 .test-res {
-  margin-bottom: 10rem;
+  /* margin-bottom: 10rem; */
 }
+@page {
+  margin-top: 10mm;
+}
+
+/* .test-res::after {
+  counter-increment: page;
+  content: "Page " counter(page);
+  left: 0;
+  bottom: 0;
+  white-space: nowrap;
+  z-index: 20;
+  border-radius: 5px;
+  box-shadow: 0px 0px 4px #222;
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+} */

@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { AiOutlinePrinter } from "react-icons/ai";
+import { FcSurvey } from "react-icons/fc";
 import { useParams } from "react-router";
 import FloatButton from "../../components/FloatButton/FloatButton";
 import { addComma } from "../../utils/addComma";
-import { Dit, Top } from "../TestRes/TestResStyle";
-import { BillList, InsCont, Item, Main } from "./BillDitStyle";
+import { Block, Dit, Footer } from "../TestRes/TestResStyle";
+import { BillList, InsCont, Item, Main, QR, Top } from "./BillDitStyle";
 import Loading from "../../components/Loading/Loading";
+import logo from "../../img/logo.png";
+import QRCode from "qrcode.react";
 
 const BillDit = () => {
   const { id } = useParams();
@@ -46,21 +49,23 @@ const BillDit = () => {
           />
           <Top>
             <div>
-              <h4> معمل رهام الطبي</h4>
-              <h4> عطبره شارع الدكاتره</h4>
+              <h2> مختبر الرهام الطبي الحديث</h2>
+              <h4> خلف مجمع طارق الطبي وجوار</h4>
+              <h4> مركز الصدى للسمع </h4>
               <h4> 0912345678</h4>
             </div>
-            <div>
-              <h1
+            <div style={{ height: "100%" }}>
+              <img
                 style={{
-                  marginRight: "2rem",
+                  width: "128px",
+                  height: "90px",
                 }}
-              >
-                Logo
-              </h1>
+                src={logo}
+                alt="logo"
+              />
             </div>
           </Top>
-          <Dit>
+          <Dit style={{ height: "65px" }}>
             <p>{user.name}</p>
             <p>0{user.phone}</p>
           </Dit>
@@ -69,6 +74,7 @@ const BillDit = () => {
               <p>Test Name</p>
               <p style={{ width: "8%", textAlign: "right" }}>Price</p>
             </Item>
+
             {tests.map((i) => {
               return (
                 <Item>
@@ -79,6 +85,7 @@ const BillDit = () => {
                 </Item>
               );
             })}
+
             <Item>
               <p style={{ fontWeight: "bolder" }}>Total</p>
               <p
@@ -106,8 +113,31 @@ const BillDit = () => {
               to={`/newres/${bill._id}`}
               left={"10%"}
               content={"Make Result"}
+              icon={<FcSurvey />}
             />
           )}
+          <Footer>
+            <p style={{ fontSize: "14px" }}>
+              <p>دقة التشخيص ... سرعةالأداء</p>
+              <p>0901459802 - 0901459802</p>
+            </p>
+            <p style={{ fontSize: "14px" }}>
+              <p>المكان خلف مجمع طارق الطبي </p>
+              <p>وجوار مركز الصدى للسمع</p>
+            </p>
+            <p style={{ fontSize: "14px" }}>
+              <p>مختبر الرهام الطبي الحديث </p>
+              <p>نتمنى لكم دوام الصحة والعافية </p>
+            </p>
+          </Footer>
+          <QR>
+            <QRCode
+              size={100}
+              value={`${bill.total} ,${user.name} ,${
+                bill.createdAt.split("T")[0]
+              }`}
+            />
+          </QR>
         </Main>
       )}
     </>
