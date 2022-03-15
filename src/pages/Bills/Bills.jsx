@@ -39,7 +39,6 @@ const Bills = () => {
   useEffect(() => {
     getBills();
   }, [all]);
-  console.log(bills);
   return (
     <>
       {loading ? (
@@ -57,11 +56,12 @@ const Bills = () => {
             <select
               style={{
                 padding: "1rem",
-                backgroun: "#f4f4f4",
+                background: "#f4f4f4",
                 border: "solid 2px #f4f4f4",
                 borderRadius: "5px",
                 fontSize: "14px",
               }}
+              value={all}
               onChange={(e) => setAll(e.target.value)}
             >
               <option value="notready">Not Ready</option>
