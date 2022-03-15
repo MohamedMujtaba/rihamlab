@@ -10,6 +10,7 @@ import Loading from "../../components/Loading/Loading";
 import logo from "../../img/logo.png";
 import { QR } from "../BillDit/BillDitStyle";
 import QRCode from "qrcode.react";
+import ResTable from "../../components/ResTable/ResTable";
 const TestRes = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
@@ -63,11 +64,18 @@ const TestRes = () => {
                 <h4> مركز الصدى للسمع </h4>
                 <h4> 0912345678</h4>
               </div>
-              <div style={{ height: "100%" }}>
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
                 <img
                   style={{
-                    width: "100%",
-                    height: "100%",
+                    width: "70%",
+                    height: "70%",
                   }}
                   src={logo}
                   alt="logo"
@@ -117,6 +125,7 @@ const TestRes = () => {
                       </TableRow>
                       <Block>
                         {test.comment && <DisplayText text={test.comment} />}
+                        {test.subTest && <ResTable tests={test.subTest} />}
                       </Block>
                     </Block>
                   );

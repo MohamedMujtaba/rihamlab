@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FcNext, FcSearch } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
+import Empty from "../../components/Empty/Empty";
 
 const Results = () => {
   const [theData, setTheData] = useState([]);
@@ -80,9 +81,13 @@ const Results = () => {
             </div>
           </div>
           <div className="user-list">
-            {results.map((result) => {
-              return <Result key={result._id} result={result} />;
-            })}
+            {results.length === 0 ? (
+              <Empty />
+            ) : (
+              results.map((result) => {
+                return <Result key={result._id} result={result} />;
+              })
+            )}
           </div>
         </div>
       )}

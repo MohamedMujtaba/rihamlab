@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MdOutlineAdd } from "react-icons/md";
 import { FcSearch, FcNext } from "react-icons/fc";
 import Loading from "../../components/Loading/Loading";
+import Empty from "../../components/Empty/Empty";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -54,9 +55,13 @@ const Users = () => {
             </div>
           </div>
           <div className="user-list">
-            {users.map((user) => {
-              return <User key={user._id} user={user} />;
-            })}
+            {users.length === 0 ? (
+              <Empty />
+            ) : (
+              users.map((user) => {
+                return <User key={user._id} user={user} />;
+              })
+            )}
           </div>
         </div>
       )}

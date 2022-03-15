@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import Loading from "../../components/Loading/Loading";
+import SubTestsTable from "../../components/SubTestsTable/SubTestsTable";
+import { nanoid } from "nanoid";
 
 const TestDit = () => {
   const { id } = useParams();
@@ -10,8 +12,15 @@ const TestDit = () => {
   const [normal, setNormal] = useState({});
   const [price, setPrice] = useState("");
   const [comments, setComments] = useState("");
+  const [row, setRow] = useState({
+    name: "",
+    results: "",
+    normal: "",
+    result: "",
+  });
+  const [subTests, setSubTests] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  console.log(subTests);
   const getTest = async () => {
     try {
       setLoading(true);
@@ -23,6 +32,7 @@ const TestDit = () => {
       setNormal(data.normal);
       setPrice(data.price);
       setComments(data.comments);
+      setSubTests(data.subTest);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -36,6 +46,7 @@ const TestDit = () => {
         normal,
         price,
         comments,
+        subTest: subTests,
       });
       // window.location.reload();
       history.push("/tests");
@@ -43,6 +54,18 @@ const TestDit = () => {
       console.log(err);
     }
   };
+  const addRow = (e) => {
+    e.preventDefault();
+    const newRow = {
+      id: nanoid(),
+      name: row.name,
+      results: row.results,
+      normal: row.normal,
+      result: "",
+    };
+    setSubTests([...subTests, newRow]);
+  };
+
   useEffect(() => {
     getTest();
   }, []);
@@ -52,8 +75,8 @@ const TestDit = () => {
         <Loading />
       ) : (
         <div className="new-test">
-          <h1>Edit Test</h1>
           <form onSubmit={updateTest}>
+            <h1>Edit Test</h1>
             <div className="input-area">
               <label htmlFor="name">Test Name</label>
               <input
@@ -109,6 +132,42 @@ const TestDit = () => {
                 Update
               </button>
             </div>
+          </form>
+          <SubTestsTable subTests={subTests} setSubTests={setSubTests} />
+          <form>
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      onChange={(e) => setRow({ ...row, name: e.target.value })}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      onChange={(e) =>
+                        setRow({ ...row, results: e.target.value })
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      onChange={(e) =>
+                        setRow({ ...row, normal: e.target.value })
+                      }
+                    />
+                  </td>
+                  <td>
+                    <button type="button" onClick={addRow}>
+                      add
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </form>
         </div>
       )}

@@ -40,6 +40,7 @@ const NewResult = () => {
       console.log(err);
     }
   };
+  console.log(tests);
 
   const getBill = async () => {
     try {
@@ -115,6 +116,11 @@ const Line = ({ test, user }) => {
           />
         </p>
       </TableRow>
+      {test.subTest.map((i) => (
+        <>
+          <Sub sTest={i} test={test} user={user} />
+        </>
+      ))}
       <textarea
         value={com}
         style={{
@@ -128,6 +134,28 @@ const Line = ({ test, user }) => {
         placeholder="Enter Comment If any..."
         onChange={(e) => setCom(e.target.value)}
       />
+    </>
+  );
+};
+
+const Sub = ({ sTest, user }) => {
+  const [res, setRes] = useState(sTest.result);
+  useEffect(() => {
+    sTest.result = res;
+  }, [res]);
+  return (
+    <>
+      <p>{sTest.name}</p>
+      {sTest.results === "" ? (
+        <input type="text" onChange={(e) => setRes(e.target.value)} />
+      ) : (
+        <select defaultValue={res} onChange={(e) => setRes(e.target.value)}>
+          {sTest.results?.split(",").map((i) => (
+            <option value={i}>{i}</option>
+          ))}
+        </select>
+      )}
+      <p>{user.gender === "Male" ? sTest.maleNormal : sTest.femaleNormal}</p>
     </>
   );
 };

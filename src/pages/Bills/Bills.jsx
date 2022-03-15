@@ -3,6 +3,8 @@ import { FcCheckmark, FcNext, FcSearch } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { addComma } from "../../utils/addComma";
 import Loading from "../../components/Loading/Loading";
+import empty from "../../img/money.png";
+import Empty from "../../components/Empty/Empty";
 
 const Bills = () => {
   const [bills, setBills] = useState([]);
@@ -37,6 +39,7 @@ const Bills = () => {
   useEffect(() => {
     getBills();
   }, [all]);
+  console.log(bills);
   return (
     <>
       {loading ? (
@@ -70,9 +73,13 @@ const Bills = () => {
             </div>
           </div>
           <div className="user-list">
-            {bills.map((bill) => {
-              return <Bill key={bill._id} bill={bill} />;
-            })}
+            {bills.length === 0 ? (
+              <Empty />
+            ) : (
+              bills.map((bill) => {
+                return <Bill key={bill._id} bill={bill} />;
+              })
+            )}
           </div>
         </div>
       )}
