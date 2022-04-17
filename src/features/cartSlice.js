@@ -10,10 +10,12 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     ADD_TO_CART: (state, action) => {
-      // FIXME:
       let item = action.payload;
-      state.cartItems = [...state.cartItems, item];
-      state.amount += item.price;
+      // FIXME:
+      if (!state.cartItems.map((i) => i._id).includes(item._id)) {
+        state.cartItems = [...state.cartItems, item];
+        state.amount += item.price;
+      }
     },
     REMOVE_FROM_CART: (state, action) => {
       const { _id, price, wanted } = action.payload;
