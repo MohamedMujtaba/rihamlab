@@ -8,9 +8,8 @@ import { Top, Dit, Table, TableRow, Block, Footer } from "./TestResStyle";
 import { FcEditImage } from "react-icons/fc";
 import Loading from "../../components/Loading/Loading";
 import logo from "../../img/logo.png";
-import { QR } from "../BillDit/BillDitStyle";
-import QRCode from "qrcode.react";
 import ResTable from "../../components/ResTable/ResTable";
+import { HStack, VStack } from "@chakra-ui/react";
 const TestRes = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
@@ -98,15 +97,27 @@ const TestRes = () => {
             </Dit>
             <Table>
               <TableRow>
-                <p style={{ textAlign: "start", width: "50%" }}>
-                  <b>Test Name</b>
-                </p>
-                <p>
-                  <b>Normal</b>
-                </p>
-                <p>
-                  <b>Result</b>
-                </p>
+                <HStack justifyContent="space-between" width="100%" h="100%">
+                  <VStack w="20%" alignItems="flex-start">
+                    <p
+                      style={{
+                        width: "100%",
+                        textAlign: "start",
+                      }}
+                    >
+                      Test Name
+                    </p>
+                  </VStack>
+                  {/* <VStack w="20%">
+                    <p>Result</p>
+                  </VStack>
+                  <VStack w="20%">
+                    <p>Normal</p>
+                  </VStack>
+                  <VStack w="20%">
+                    <p>Unit</p>
+                  </VStack> */}
+                </HStack>
               </TableRow>
               <Block>
                 {tests.map((test) => {
@@ -116,16 +127,12 @@ const TestRes = () => {
                         <p style={{ textAlign: "start", width: "50%" }}>
                           {test.testName}
                         </p>
-                        <p>
-                          {user.gender === "Male"
-                            ? test.normal.male
-                            : test.normal.female}
-                        </p>
-                        <p>{test.result}</p>
                       </TableRow>
                       <Block>
                         {test.comment && <DisplayText text={test.comment} />}
-                        {test.subTest && <ResTable tests={test.subTest} />}
+                        {test.subTest && (
+                          <ResTable tests={test.wanted} gender={user.gender} />
+                        )}
                       </Block>
                     </Block>
                   );

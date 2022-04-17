@@ -9,6 +9,7 @@ import { BillList, InsCont, Item, Main, QR, Top } from "./BillDitStyle";
 import Loading from "../../components/Loading/Loading";
 import logo from "../../img/logo.png";
 import QRCode from "qrcode.react";
+import { useToast } from "@chakra-ui/react";
 
 const BillDit = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const BillDit = () => {
   const [bill, setBill] = useState({});
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
 
   const getBill = async () => {
     try {
@@ -29,6 +31,14 @@ const BillDit = () => {
       setLoading(false);
     } catch (err) {
       console.log(err);
+      toast({
+        // position: "top-left",
+        title: "Something went wrong",
+        description: err,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

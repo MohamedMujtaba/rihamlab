@@ -3,7 +3,6 @@ import { FcCheckmark, FcNext, FcSearch } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { addComma } from "../../utils/addComma";
 import Loading from "../../components/Loading/Loading";
-import empty from "../../img/money.png";
 import Empty from "../../components/Empty/Empty";
 
 const Bills = () => {

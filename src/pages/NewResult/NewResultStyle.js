@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Table = styled.div`
+export const TN = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -22,4 +22,3 @@ export const TableRow = styled.div`
     text-align: center;
   }
 `;
-

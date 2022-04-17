@@ -4,23 +4,46 @@ import { useHistory, useParams } from "react-router";
 import Loading from "../../components/Loading/Loading";
 import SubTestsTable from "../../components/SubTestsTable/SubTestsTable";
 import { nanoid } from "nanoid";
+import { FcCheckmark } from "react-icons/fc";
+
+import {
+  Button,
+  Heading,
+  Input,
+  Table,
+  Td,
+  Textarea,
+  Tr,
+  useToast,
+} from "@chakra-ui/react";
+import {
+  Bottom,
+  Container,
+  InputContainer,
+  Left,
+  MainForm,
+  Right,
+  Top,
+} from "../NewTest/NewTestStyle";
+import FloatButton from "../../components/FloatButton/FloatButton";
 
 const TestDit = () => {
   const { id } = useParams();
   const history = useHistory();
   const [name, setName] = useState("");
-  const [normal, setNormal] = useState({});
-  const [price, setPrice] = useState("");
   const [comments, setComments] = useState("");
   const [row, setRow] = useState({
     name: "",
     results: "",
-    normal: "",
+    maleNormal: "",
+    femaleNormal: "",
+    unit: "",
     result: "",
+    price: 0,
   });
   const [subTests, setSubTests] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(subTests);
+  const toast = useToast();
   const getTest = async () => {
     try {
       setLoading(true);
@@ -29,8 +52,7 @@ const TestDit = () => {
       );
       const data = await res.json();
       setName(data.testName);
-      setNormal(data.normal);
-      setPrice(data.price);
+      // FIXME: remove the normal from here and from the server
       setComments(data.comments);
       setSubTests(data.subTest);
       setLoading(false);
@@ -38,18 +60,35 @@ const TestDit = () => {
       console.log(err);
     }
   };
-  const updateTest = async (e) => {
+  const push = async () => {
+    await axios.put(`https://reham-api-v1.herokuapp.com/api/v1/tests/${id}`, {
+      testName: name,
+      // FIXME: remove the normal from here and from the server
+      normal: {},
+      // FIXME: remove the price and set the the price as default 0 in the server
+      price: 0,
+      comments,
+      subTest: subTests,
+    });
+    history.push("/tests");
+  };
+  const updateTest = (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://reham-api-v1.herokuapp.com/api/v1/tests/${id}`, {
-        testName: name,
-        normal,
-        price,
-        comments,
-        subTest: subTests,
-      });
+      if (subTests.length !== 0) {
+        push();
+      } else {
+        toast({
+          // position: "top-left",
+          title: "There is no test added.",
+          description: "Please add some tests ",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+
       // window.location.reload();
-      history.push("/tests");
     } catch (err) {
       console.log(err);
     }
@@ -60,12 +99,19 @@ const TestDit = () => {
       id: nanoid(),
       name: row.name,
       results: row.results,
-      normal: row.normal,
+      maleNormal: row.maleNormal,
+      femaleNormal: row.femaleNormal,
       result: "",
+      unit: row.unit,
+      price: row.price,
     };
     setSubTests([...subTests, newRow]);
   };
-
+  const deleteRow = (event, id) => {
+    event.preventDefault();
+    const newSubTests = subTests.filter((i) => i.id !== id);
+    setSubTests(newSubTests);
+  };
   useEffect(() => {
     getTest();
   }, []);
@@ -74,102 +120,118 @@ const TestDit = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="new-test">
-          <form onSubmit={updateTest}>
-            <h1>Edit Test</h1>
-            <div className="input-area">
-              <label htmlFor="name">Test Name</label>
-              <input
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                name="name"
+        <Container>
+          <Top>
+            <Heading>Test Details</Heading>
+            <MainForm form onSubmit={updateTest}>
+              <Left>
+                <div>
+                  <InputContainer>
+                    <label htmlFor="name">Test Name</label>
+                    <Input
+                      required
+                      type="text"
+                      name="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+
+                    <label htmlFor="Male Normal">Male Normal</label>
+                  </InputContainer>
+                </div>
+              </Left>
+              <Right>
+                <>
+                  <img src="../../img/full-screen.png" alt="" />
+                  <label htmlFor="Comments">Comments</label>
+                  <Textarea
+                    name="Comments"
+                    value={comments}
+                    onChange={(e) => setComments(e.target.value)}
+                  />
+                </>
+              </Right>
+              <FloatButton
+                type="submit"
+                icon={<FcCheckmark />}
+                content={"Done"}
+                left={"5%"}
               />
-            </div>
-            <div className="input-area">
-              <label htmlFor="normal">Male Normal</label>
-              <input
-                value={normal.male}
-                required
-                type="text"
-                name="normal"
-                onChange={(e) => setNormal({ ...normal, male: e.target.value })}
-              />
-            </div>
-            <div className="input-area">
-              <label htmlFor="normal">Female Normal</label>
-              <input
-                value={normal.female}
-                required
-                type="text"
-                name="normal"
-                onChange={(e) =>
-                  setNormal({ ...normal, female: e.target.value })
-                }
-              />
-            </div>
-            <div className="input-area">
-              <label htmlFor="price">Price</label>
-              <input
-                required
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                name="price"
-                type="number"
-              />
-            </div>
-            <div className="input-area">
-              <label htmlFor="comments">Comments</label>
-              <textarea
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
-                name="comments"
-              />
-            </div>
-            <div className="input-area">
-              <button className="btn" type="submit">
-                Update
-              </button>
-            </div>
-          </form>
-          <SubTestsTable subTests={subTests} setSubTests={setSubTests} />
-          <form>
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <input
+            </MainForm>
+          </Top>
+          <Bottom>
+            <SubTestsTable
+              subTests={subTests}
+              setSubTests={setSubTests}
+              deleteRow={deleteRow}
+            />
+            <form onSubmit={(e) => addRow(e)}>
+              <Table variant="simple">
+                <Tr>
+                  <Td>
+                    <Input
+                      required
+                      placeholder="Enter Test Name"
                       type="text"
                       onChange={(e) => setRow({ ...row, name: e.target.value })}
                     />
-                  </td>
-                  <td>
-                    <input
+                  </Td>
+                  <Td>
+                    <Input
+                      required
+                      placeholder="Enter Test Results"
                       type="text"
                       onChange={(e) =>
                         setRow({ ...row, results: e.target.value })
                       }
                     />
-                  </td>
-                  <td>
-                    <input
+                  </Td>
+                  <Td>
+                    <Input
+                      required
+                      placeholder="Enter Male normal"
                       type="text"
                       onChange={(e) =>
-                        setRow({ ...row, normal: e.target.value })
+                        setRow({ ...row, maleNormal: e.target.value })
                       }
                     />
-                  </td>
-                  <td>
-                    <button type="button" onClick={addRow}>
-                      add
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </div>
+                  </Td>
+                  <Td>
+                    <Input
+                      required
+                      placeholder="Enter Female normal"
+                      type="text"
+                      onChange={(e) =>
+                        setRow({ ...row, femaleNormal: e.target.value })
+                      }
+                    />
+                  </Td>
+                  <Td>
+                    <Input
+                      required
+                      placeholder="Enter Unit"
+                      type="text"
+                      onChange={(e) => setRow({ ...row, unit: e.target.value })}
+                    />
+                  </Td>
+                  <Td>
+                    <Input
+                      required
+                      placeholder="Enter Price"
+                      type="number"
+                      onChange={(e) =>
+                        setRow({ ...row, price: +e.target.value })
+                      }
+                    />
+                  </Td>
+                  <Td>
+                    <Button type="submit">add</Button>
+                  </Td>
+                </Tr>
+              </Table>
+            </form>
+          </Bottom>
+        </Container>
       )}
     </>
   );

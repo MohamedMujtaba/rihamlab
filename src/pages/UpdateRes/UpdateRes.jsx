@@ -5,8 +5,20 @@ import axios from "axios";
 import "./NewResult.css";
 import { FcCheckmark } from "react-icons/fc";
 import FloatButton from "../../components/FloatButton/FloatButton";
-import { Table, TableRow } from "./NewResultStyle";
+import { TableRow } from "./NewResultStyle";
 import Loading from "../../components/Loading/Loading";
+import { TN } from "../NewResult/NewResultStyle";
+import {
+  HStack,
+  Input,
+  InputGroup,
+  Select,
+  TagLabel,
+  VStack,
+  Table,
+  Tr,
+  Td,
+} from "@chakra-ui/react";
 const NewResult = () => {
   const { id } = useParams();
   const history = useHistory();
@@ -53,11 +65,33 @@ const NewResult = () => {
         <Loading />
       ) : (
         <div>
-          <Table>
+          <TN>
             <TableRow>
-              <p style={{ textAlign: "start", width: "50%" }}>Test Name</p>
-              <p>Normal</p>
+              {/* <p style={{ textAlign: "start", width: "50%" }}>Test Name</p>
               <p>Result</p>
+              <p>Normal</p>
+              <p>Unit</p> */}
+              <HStack justifyContent="space-between" width="100%" h="100%">
+                <VStack w="20%" alignItems="flex-start">
+                  <p
+                    style={{
+                      width: "100%",
+                      textAlign: "start",
+                    }}
+                  >
+                    Test Name
+                  </p>
+                </VStack>
+                <VStack w="20%">
+                  <p>Result</p>
+                </VStack>
+                <VStack w="20%">
+                  <p>Normal</p>
+                </VStack>
+                <VStack w="20%">
+                  <p>Unit</p>
+                </VStack>
+              </HStack>
             </TableRow>
             <form
               onSubmit={handleSubmit}
@@ -69,13 +103,13 @@ const NewResult = () => {
                 return <Line test={test} user={user} />;
               })}
               <FloatButton
-                content={"Done"}
                 icon={<FcCheckmark />}
                 type={"submit"}
                 att={"button"}
+                content={"Done"}
               />
             </form>
-          </Table>
+          </TN>
         </div>
       )}
     </>
@@ -83,35 +117,33 @@ const NewResult = () => {
 };
 
 const Line = ({ test, user }) => {
-  const [res, setRes] = useState("");
-  const [com, setCom] = useState("");
+  // const [res, setRes] = useState("");
+  const [com, setCom] = useState(test.comments);
   useEffect(() => {
-    setRes(test.result);
-    setCom(test.comment);
-  }, []);
-  useEffect(() => {
-    test.result = res;
+    // test.result = res;
     test.comment = com;
-  }, [res, com, test]);
+  }, [com, test]);
   return (
     <>
       <TableRow>
         <p style={{ textAlign: "start", width: "50%" }}>{test.testName}</p>
-        <p>{user.gender === "Male" ? test.normal.male : test.normal.female}</p>
+        {/* <p>{user.gender === "Male" ? test.normal.male : test.normal.female}</p>
         <p>
-          {" "}
           <input
             required
-            value={res}
             className="result-input"
             type="text"
             onChange={(e) => setRes(e.target.value)}
           />
-        </p>
+        </p> */}
       </TableRow>
+      {test.wanted.map((i) => (
+        <>
+          <Sub sTest={i} test={test} user={user} />
+        </>
+      ))}
       <textarea
         value={com}
-        type="text"
         style={{
           textAlign: "left",
           width: "100%",
@@ -124,6 +156,59 @@ const Line = ({ test, user }) => {
         onChange={(e) => setCom(e.target.value)}
       />
     </>
+  );
+};
+
+const Sub = ({ sTest, user }) => {
+  const [res, setRes] = useState(sTest.result);
+  const [unit, setUnit] = useState(sTest.unit);
+  const [normal, setNormal] = useState(
+    user.gender === "Male" ? sTest.maleNormal : femaleNormal
+  );
+  useEffect(() => {
+    sTest.result = res;
+    sTest.unit = unit;
+    if (user.gender === "Male") {
+      sTest.maleNormal = normal;
+    } else {
+      sTest.femaleNormal = normal;
+    }
+  }, [res, unit, normal]);
+  return (
+    <Table marginY="1rem">
+      <HStack justifyContent="space-between">
+        <VStack w="20%" alignItems="flex-start" paddingLeft="1rem">
+          <p>{sTest.name}</p>
+        </VStack>
+        <VStack w="20%">
+          {sTest.results === "" ? (
+            <Input
+              value={res}
+              type="text"
+              onChange={(e) => setRes(e.target.value)}
+            />
+          ) : (
+            <Select defaultValue={""} onChange={(e) => setRes(e.target.value)}>
+              {sTest.results?.split(",").map((i) => (
+                <option value={i}>{i}</option>
+              ))}
+            </Select>
+          )}
+        </VStack>
+        <VStack w="20%">
+          <Input
+            defaultValue={normal}
+            onChange={(e) => setNormal(e.target.value)}
+          />
+        </VStack>
+        <VStack w="20%">
+          <Input
+            defaultValue={unit}
+            onChange={(e) => setUnit(e.target.value)}
+          />
+        </VStack>
+      </HStack>
+    </Table>
   );
 };
 

@@ -9,29 +9,45 @@ import { CgCloseO } from "react-icons/cg";
 import FloatButton from "../../components/FloatButton/FloatButton";
 import Loading from "../../components/Loading/Loading";
 
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box,
+  useToast,
+  Button,
+  HStack,
+  Spacer,
+  Checkbox,
+  Badge,
+  Stack,
+  Input,
+} from "@chakra-ui/react";
+import BigTest from "./AddBillComponents/BigTest";
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_TO_CART, REMOVE_FROM_CART } from "../../features/cartSlice";
+
 const NewBill = () => {
+  const { cartItems, amount } = useSelector((store) => store.cart);
+
   const { userid } = useParams();
   const history = useHistory();
+  const [searchWord, setSearchWord] = useState("");
   const [user, setUser] = useState({});
   const [tests, setTests] = useState([]);
   const [insurance, setInsurance] = useState();
   const [insuranceNumber, setInsuranceNumber] = useState();
   const [theData, setTheData] = useState([]);
-  const [bill, setBill] = useState([]);
-  const [total, setTotal] = useState(0);
   const [have, setHave] = useState("");
   const [loading, setLoading] = useState(true);
-  const search = (e) => {
-    let searchWord = e.target.value.toLowerCase();
+  const toast = useToast();
+  useEffect(() => {
     if (searchWord === "") {
       setTests(theData);
-    } else {
-      let newF = tests.filter((i) => {
-        return i.testName.toLowerCase().includes(searchWord);
-      });
-      setTests(newF);
     }
-  };
+  }, [searchWord]);
 
   const getTests = async () => {
     try {
@@ -79,49 +95,51 @@ const NewBill = () => {
     }
   };
   const add = (test) => {
-    if (
-      !bill
-        .map((i) => {
-          return i._id;
-        })
-        .includes(test._id)
-    ) {
-      setBill([...bill, { ...test, result: "" }]);
-    }
+    dispatch(ADD_TO_CART({ ...test, wanted: [] }));
   };
-  const handeleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("https://reham-api-v1.herokuapp.com/api/v1/bills", {
-        user: user,
-        tests: bill,
-        insurance,
-        insuranceNumber,
-        total,
-      });
-      history.push(`/userdit/${userid}`);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const handeleDelete = (id) => {
-    setBill(
-      bill.filter((i) => {
-        return i._id !== id;
-      })
-    );
+
+  const handelDelete = (test) => {
+    dispatch(REMOVE_FROM_CART(test));
   };
   useEffect(() => {
     getTests();
     getUser();
   }, []);
-  useEffect(() => {
-    const tv = bill.reduce((acc, curr) => {
-      acc += curr.price;
-      return acc;
-    }, 0);
-    setTotal(tv);
-  }, [bill]);
+  const dispatch = useDispatch();
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+    if (amount > 0) {
+      try {
+        await axios.post("https://reham-api-v1.herokuapp.com/api/v1/bills", {
+          user: user,
+          tests: cartItems,
+          insurance,
+          insuranceNumber,
+          total: amount,
+        });
+        toast({
+          // position: "top-left",
+          title: "Bill created.",
+          description: "Bill have been created",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        history.push(`/userdit/${userid}`);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      toast({
+        // position: "top-left",
+        title: "Bill not created.",
+        description: "There is no tests selected!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       {loading ? (
@@ -129,39 +147,21 @@ const NewBill = () => {
       ) : (
         <div className="new-bill">
           <Left>
-            {total > 0 && (
-              <FloatButton
-                icon={<FcCheckmark />}
-                onClick={handeleSubmit}
-                left={"10%"}
-                content={"Done"}
-              />
-            )}
+            <FloatButton
+              icon={<FcCheckmark />}
+              onClick={handelSubmit}
+              left={"10%"}
+              content={"Done"}
+            />
+
             <Cart>
-              {bill.map((i) => {
+              {/* FIXME: */}
+              {cartItems.map((i) => {
                 return (
-                  <div key={i._id} className="line">
-                    <p>{i.testName}</p>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "15px",
-                      }}
-                    >
-                      <p>{i.price}</p>
-                      <CloseBtn
-                        onClick={() => {
-                          handeleDelete(i._id);
-                        }}
-                      >
-                        <CgCloseO />
-                      </CloseBtn>
-                    </div>
-                  </div>
+                  <BigTest key={i._id} i={i} handelDelete={handelDelete} />
                 );
               })}
-              {total > 0 && (
+              {amount > 0 && (
                 <div className="line">
                   <p>
                     <b>Total</b>
@@ -174,8 +174,7 @@ const NewBill = () => {
                     }}
                   >
                     <p>
-                      {" "}
-                      <b>{total}</b>
+                      <b>{amount}</b>
                     </p>
                     <p>
                       <small>SDG</small>
@@ -189,7 +188,7 @@ const NewBill = () => {
               type="checkbox"
               name="have"
               // value="have"
-              onClick={(e) => setHave(!have)}
+              onClick={() => setHave(!have)}
             />
             <label htmlFor="have">Have insurance</label>
             {have === true && (
@@ -215,25 +214,26 @@ const NewBill = () => {
               </div>
             )}
           </Left>
+
           <Right>
             <div className="top" style={{ justifyContent: "flex-end" }}>
               <div className="input-handler">
-                <input className="input" type="text" onChange={search} />
+                <input
+                  className="input"
+                  type="text"
+                  onChange={(e) => setSearchWord(e.target.value)}
+                />
                 <FcSearch className="icon" />
               </div>
             </div>
             <List>
-              {tests.map((test) => {
-                return (
-                  <Test
-                    add={add}
-                    key={test._id}
-                    test={test}
-                    setBill={setBill}
-                    bill={bill}
-                  />
-                );
-              })}
+              {tests
+                .filter((t) =>
+                  t.testName.toLowerCase().includes(searchWord.toLowerCase())
+                )
+                .map((test) => {
+                  return <Test add={add} key={test._id} test={test} />;
+                })}
             </List>
           </Right>
         </div>
@@ -242,7 +242,7 @@ const NewBill = () => {
   );
 };
 
-const Test = ({ test, setBill, bill, add }) => {
+const Test = ({ test, add }) => {
   return (
     <div
       className="test"

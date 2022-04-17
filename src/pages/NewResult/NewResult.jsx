@@ -5,8 +5,19 @@ import axios from "axios";
 import "./NewResult.css";
 import { FcCheckmark } from "react-icons/fc";
 import FloatButton from "../../components/FloatButton/FloatButton";
-import { Table, TableRow } from "./NewResultStyle";
+import { TN, TableRow } from "./NewResultStyle";
 import Loading from "../../components/Loading/Loading";
+import {
+  HStack,
+  Input,
+  InputGroup,
+  Select,
+  TagLabel,
+  VStack,
+  Table,
+  Tr,
+  Td,
+} from "@chakra-ui/react";
 
 const NewResult = () => {
   const { id } = useParams();
@@ -66,11 +77,33 @@ const NewResult = () => {
         <Loading />
       ) : (
         <div>
-          <Table>
+          <TN>
             <TableRow>
-              <p style={{ textAlign: "start", width: "50%" }}>Test Name</p>
-              <p>Normal</p>
+              {/* <p style={{ textAlign: "start", width: "50%" }}>Test Name</p>
               <p>Result</p>
+              <p>Normal</p>
+              <p>Unit</p> */}
+              <HStack justifyContent="space-between" width="100%" h="100%">
+                <VStack w="20%" alignItems="flex-start">
+                  <p
+                    style={{
+                      width: "100%",
+                      textAlign: "start",
+                    }}
+                  >
+                    Test Name
+                  </p>
+                </VStack>
+                <VStack w="20%">
+                  <p>Result</p>
+                </VStack>
+                <VStack w="20%">
+                  <p>Normal</p>
+                </VStack>
+                <VStack w="20%">
+                  <p>Unit</p>
+                </VStack>
+              </HStack>
             </TableRow>
             <form
               onSubmit={handleSubmit}
@@ -88,7 +121,7 @@ const NewResult = () => {
                 content={"Done"}
               />
             </form>
-          </Table>
+          </TN>
         </div>
       )}
     </>
@@ -96,17 +129,17 @@ const NewResult = () => {
 };
 
 const Line = ({ test, user }) => {
-  const [res, setRes] = useState("");
+  // const [res, setRes] = useState("");
   const [com, setCom] = useState(test.comments);
   useEffect(() => {
-    test.result = res;
+    // test.result = res;
     test.comment = com;
-  }, [res, com, test]);
+  }, [com, test]);
   return (
     <>
       <TableRow>
         <p style={{ textAlign: "start", width: "50%" }}>{test.testName}</p>
-        <p>{user.gender === "Male" ? test.normal.male : test.normal.female}</p>
+        {/* <p>{user.gender === "Male" ? test.normal.male : test.normal.female}</p>
         <p>
           <input
             required
@@ -114,9 +147,9 @@ const Line = ({ test, user }) => {
             type="text"
             onChange={(e) => setRes(e.target.value)}
           />
-        </p>
+        </p> */}
       </TableRow>
-      {test.subTest.map((i) => (
+      {test.wanted.map((i) => (
         <>
           <Sub sTest={i} test={test} user={user} />
         </>
@@ -140,23 +173,50 @@ const Line = ({ test, user }) => {
 
 const Sub = ({ sTest, user }) => {
   const [res, setRes] = useState(sTest.result);
+  const [unit, setUnit] = useState(sTest.unit);
+  const [normal, setNormal] = useState(
+    user.gender === "Male" ? sTest.maleNormal : femaleNormal
+  );
   useEffect(() => {
     sTest.result = res;
-  }, [res]);
+    sTest.unit = unit;
+    if (user.gender === "Male") {
+      sTest.maleNormal = normal;
+    } else {
+      sTest.femaleNormal = normal;
+    }
+  }, [res, unit, normal]);
   return (
-    <>
-      <p>{sTest.name}</p>
-      {sTest.results === "" ? (
-        <input type="text" onChange={(e) => setRes(e.target.value)} />
-      ) : (
-        <select defaultValue={res} onChange={(e) => setRes(e.target.value)}>
-          {sTest.results?.split(",").map((i) => (
-            <option value={i}>{i}</option>
-          ))}
-        </select>
-      )}
-      <p>{user.gender === "Male" ? sTest.maleNormal : sTest.femaleNormal}</p>
-    </>
+    <Table marginY="1rem">
+      <HStack justifyContent="space-between">
+        <VStack w="20%" alignItems="flex-start" paddingLeft="1rem">
+          <p>{sTest.name}</p>
+        </VStack>
+        <VStack w="20%">
+          {sTest.results === "" ? (
+            <Input type="text" onChange={(e) => setRes(e.target.value)} />
+          ) : (
+            <Select defaultValue={""} onChange={(e) => setRes(e.target.value)}>
+              {sTest.results?.split(",").map((i) => (
+                <option value={i}>{i}</option>
+              ))}
+            </Select>
+          )}
+        </VStack>
+        <VStack w="20%">
+          <Input
+            defaultValue={normal}
+            onChange={(e) => setNormal(e.target.value)}
+          />
+        </VStack>
+        <VStack w="20%">
+          <Input
+            defaultValue={unit}
+            onChange={(e) => setUnit(e.target.value)}
+          />
+        </VStack>
+      </HStack>
+    </Table>
   );
 };
 
