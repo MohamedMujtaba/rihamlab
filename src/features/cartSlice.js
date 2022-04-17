@@ -11,7 +11,7 @@ const cartSlice = createSlice({
   reducers: {
     ADD_TO_CART: (state, action) => {
       let item = action.payload;
-      // FIXME:
+      // FIXME: not fixed yet
       if (!state.cartItems.map((i) => i._id).includes(item._id)) {
         state.cartItems = [...state.cartItems, item];
         state.amount += item.price;
@@ -42,11 +42,14 @@ const cartSlice = createSlice({
         test.price -= +subTest.price;
         state.amount -= +subTest.price;
       }
-
-      console.log(test.wanted);
+    },
+    RESET_STATE: (state) => {
+      state.cartItems = initialState.cartItems;
+      state.amount = initialState.amount;
     },
   },
 });
 
-export const { ADD_TO_CART, REMOVE_FROM_CART, SUBTEST } = cartSlice.actions;
+export const { ADD_TO_CART, REMOVE_FROM_CART, SUBTEST, RESET_STATE } =
+  cartSlice.actions;
 export default cartSlice.reducer;

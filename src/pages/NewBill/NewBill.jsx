@@ -27,11 +27,14 @@ import {
 } from "@chakra-ui/react";
 import BigTest from "./AddBillComponents/BigTest";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../../features/cartSlice";
+import {
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  RESET_STATE,
+} from "../../features/cartSlice";
 
 const NewBill = () => {
   const { cartItems, amount } = useSelector((store) => store.cart);
-
   const { userid } = useParams();
   const history = useHistory();
   const [searchWord, setSearchWord] = useState("");
@@ -43,6 +46,8 @@ const NewBill = () => {
   const [have, setHave] = useState("");
   const [loading, setLoading] = useState(true);
   const toast = useToast();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (searchWord === "") {
       setTests(theData);
@@ -105,7 +110,6 @@ const NewBill = () => {
     getTests();
     getUser();
   }, []);
-  const dispatch = useDispatch();
   const handelSubmit = async (e) => {
     e.preventDefault();
     if (amount > 0) {
@@ -117,6 +121,7 @@ const NewBill = () => {
           insuranceNumber,
           total: amount,
         });
+        dispatch(RESET_STATE());
         toast({
           // position: "top-left",
           title: "Bill created.",
