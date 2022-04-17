@@ -175,7 +175,7 @@ const Sub = ({ sTest, user }) => {
   const [res, setRes] = useState(sTest.result);
   const [unit, setUnit] = useState(sTest.unit);
   const [normal, setNormal] = useState(
-    user.gender === "Male" ? sTest.maleNormal : femaleNormal
+    user.gender === "Male" ? sTest.maleNormal : sTest.femaleNormal
   );
   useEffect(() => {
     sTest.result = res;
