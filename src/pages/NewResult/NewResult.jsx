@@ -194,9 +194,18 @@ const Sub = ({ sTest, user }) => {
         </VStack>
         <VStack w="20%">
           {sTest.results === "" ? (
-            <Input type="text" onChange={(e) => setRes(e.target.value)} />
+            <Input
+              required
+              type="text"
+              onChange={(e) => setRes(e.target.value)}
+            />
           ) : (
-            <Select defaultValue={""} onChange={(e) => setRes(e.target.value)}>
+            <Select
+              required
+              defaultValue={""}
+              onChange={(e) => setRes(e.target.value)}
+            >
+              <option value="">Please select</option>
               {sTest.results?.split(",").map((i) => (
                 <option value={i}>{i}</option>
               ))}
@@ -205,12 +214,14 @@ const Sub = ({ sTest, user }) => {
         </VStack>
         <VStack w="20%">
           <Input
+            required
             defaultValue={normal}
             onChange={(e) => setNormal(e.target.value)}
           />
         </VStack>
         <VStack w="20%">
           <Input
+            required
             defaultValue={unit}
             onChange={(e) => setUnit(e.target.value)}
           />
